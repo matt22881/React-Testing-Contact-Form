@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import isEmail from "validator/lib/isEmail"
 
 const ContactForm = () => {
   const [data, setData] = useState();
@@ -18,7 +19,7 @@ const ContactForm = () => {
           <input
             name="firstName"
             placeholder="Edd"
-            ref={register({ required: true, maxLength: 3 })}
+            ref={register({ required: true, minLength: 3 })}
           />
           {errors.firstName && (
             <p>Looks like there was an error: {errors.firstName.type}</p>
@@ -38,24 +39,26 @@ const ContactForm = () => {
         </div>
 
         <div>
-          <label htmlFor="email" placeholder="bluebill1049@hotmail.com">
+          <label>
             Email*
+          <input name="email" aria-labelledby='email' placeholder="bluebill1049@hotmail.com" ref={register({ required: true, validate: (input) => isEmail(input) })} />
           </label>
-          <input name="email" ref={register({ required: true })} />
           {errors.email && (
             <p>Looks like there was an error: {errors.email.type}</p>
           )}
         </div>
         <div>
-          <label htmlFor="message">Message</label>
-          <textarea name="message" ref={register({ required: false })} />
+          <label>
+            message
+          <textarea name="message" placeholder="Message" ref={register({ required: false })} />
+            </label>
         </div>
         {data && (
           <pre style={{ textAlign: "left", color: "white" }}>
             {JSON.stringify(data, null, 2)}
           </pre>
         )}
-        <input type="submit" />
+        <button type="submit">Submit</button>
       </form>
     </div>
   );
